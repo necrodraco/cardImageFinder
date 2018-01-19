@@ -4,6 +4,7 @@ package AutoCompiler{
 	use File::Find; 
 	use DBI; 
 	use YAML 'LoadFile';
+	use Data::Dumper; 
 	my $ressources; 
 	if(-e 'properties.yaml'){
 		$ressources = LoadFile('properties.yaml');
@@ -20,10 +21,13 @@ package AutoCompiler{
 	foreach my $file(@cdbs){
 		my $dbargs = {'AutoCommit' => 1, 'PrintError' => 1};
 		my $dbh = DBI->connect("dbi:SQLite:dbname=$file", "", "", $dbargs);
-		my $sth = $dbh->prepare('select id from datas')or die "$DBI::errstr\n";
+		my $statement = 'select d.id, d.ot, d.type, t.name from datas d join texts t on d.id = t.id';
+		my $sth = $dbh->prepare($statement)or die "$DBI::errstr\n";
 		$sth->execute();
 		while(my $row = $sth->fetchrow_hashref()){
-			$out{$row->{'id'}} = 1;
+			if($row->{'ot'} < 5 && $row->{'type'} != 16385 && $row->{'type'} != 16401 && $row->{'type'} != 16384 && !($row->{'name'} =~ m/(Anime)/)){			
+				$out{$row->{'id'}}{$file} = $row;
+			}
 		}
 		$dbh->disconnect();
 	}
@@ -32,8 +36,9 @@ package AutoCompiler{
 	my $level = 1; 
 	my $count = 0; 
 	while(my ($id, $stat) = each %out){
-		if($stat == 1){
-			if(scalar @{$idlist{$level}} == 75){
+		if($stat != 0){
+			print Dumper $stat; 			
+			if(scalar @{$idlist{$level}} == 30){
 				$level++;
 				$count = 0;  
 			}
