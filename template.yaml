@@ -1,0 +1,12 @@
+##How to Use these Configuration File: 
+# the #-Symbol means that this line will not be readed
+
+#The FULL PATH pics-Folder in the Main Folder of ygpro-percy
+#E.g. C://program (x86)/ygopro-percy/pics
+image: /
+
+#The cards.cdb-File in the Main Folder of ygopro-percy
+cdb: /
+
+#The Expansion-Folder in the Main Folder of ygpro-percy
+expansion: /
