@@ -37,7 +37,9 @@ package AutoCompiler{
 	my $count = 0; 
 	while(my ($id, $stat) = each %out){
 		if($stat != 0){
-			print Dumper $stat; 			
+			if($ressources->{'test'} == 1){
+				print Dumper $stat;
+			} 			
 			if(scalar @{$idlist{$level}} == 30){
 				$level++;
 				$count = 0;  
@@ -47,7 +49,7 @@ package AutoCompiler{
 		}
 	}
 	while(my ($level, $list) = each %idlist){
-		open(my $fh, '>', "$level.ydk") or die "Could not open file '$filename' $!";
+		open(my $fh, '>', "deck/$level.ydk") or die "Could not open file '$filename' $!";
 			foreach my $id(@{$list}){
 				print $fh "$id\n"; 
 			}
